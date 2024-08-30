@@ -211,34 +211,26 @@ document.addEventListener('DOMContentLoaded', () => {
             workoutEntry.classList.add('workout-entry');
             workoutEntry.innerHTML = `
                 <h3>אימון - ${workout.date} - משך: ${workout.duration}</h3>
+                <button class="delete-button" data-index="${index}">מחק</button>
             `;
 
             workout.exercises.forEach(exercise => {
-                const exerciseDetails = document.createElement('div');
-                exerciseDetails.classList.add('exercise-details');
-                exerciseDetails.innerHTML = `
-                    <p>${exercise.name}: ${exercise.weight} ק"ג</p>
-                    <div class="set-list-history">
-                        ${exercise.sets.map(reps => `
-                            <button class="set-button-history ${reps > 0 ? 'completed' : ''}">${reps}</button>
-                        `).join('')}
-                    </div>
-                `;
-
-                workoutEntry.appendChild(exerciseDetails);
+                const totalWeight = exercise.sets.reduce((acc, reps) => acc + (reps * exercise.weight), 0);
+                const exerciseInfo = document.createElement('p');
+                exerciseInfo.textContent = `${exercise.name}: ${exercise.weight} ק"ג - סטים: ${exercise.sets.join(', ')} - סה"כ משקל: ${totalWeight} ק"ג`;
+                workoutEntry.appendChild(exerciseInfo);
             });
 
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
-            deleteButton.textContent = 'מחק';
-            deleteButton.addEventListener('click', () => {
+            historyContainer.appendChild(workoutEntry);
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const index = event.target.dataset.index;
                 workoutHistory.splice(index, 1);
                 saveWorkoutHistory(workoutHistory);
                 displayWorkoutHistory();
             });
-
-            workoutEntry.appendChild(deleteButton);
-            historyContainer.appendChild(workoutEntry);
         });
     }
 
