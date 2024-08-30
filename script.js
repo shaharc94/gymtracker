@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
     progressCircle.style.strokeDashoffset = circumference;
 
+    // Load saved weights from cookies
+    loadSavedWeights();
+
     function updateSetReps(exerciseIndex, setIndex) {
         const exercise = exercises[exerciseIndex];
         let currentReps = exercise.sets[setIndex];
@@ -75,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const weightDisplay = exerciseElement.querySelector('.weight-display');
         weightDisplay.textContent = `${selectedDetails.weight} ק"ג`;
+
+        // Save the updated weight to cookies
+        saveWeightsToCookies();
     }
 
     function updateWeight(exerciseIndex, increment) {
@@ -86,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         exercise.weight = newWeight;
         weightDisplay.textContent = `${newWeight} ק"ג`;
+
+        // Save the updated weight to cookies
+        saveWeightsToCookies();
     }
 
     function updateSetCount(exerciseIndex, increment) {
@@ -162,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-        const workoutDate = workoutEndTime.toLocaleDateString('he-IL');
+        const workoutDate = workoutEndTime.toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' });
         const workoutDetails = {
             date: workoutDate,
             duration: formattedDuration,
@@ -201,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const workoutEntry = document.createElement('div');
             workoutEntry.classList.add('workout-entry');
             workoutEntry.innerHTML = `
-                <h3>אימון ${index + 1} - ${workout.date} - משך: ${workout.duration}</h3>
+                <h3>אימון - ${workout.date} - משך: ${workout.duration}</h3>
                 <button class="delete-button" data-index="${index}">מחק</button>
             `;
 
@@ -236,6 +245,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return JSON.parse(decodeURIComponent(workoutCookie.split('=')[1]));
         }
         return [];
+    }
+
+    function saveWeightsToCookies() {
+        const weights = exercises.map(exercise => ({ name: exercise.name, weight: exercise.weight }));
+        document.cookie = `exerciseWeights=${encodeURIComponent(JSON.stringify(weights))}; path=/; max-age=31536000`;
+    }
+
+    function loadSavedWeights() {
+        const cookies = document.cookie.split('; ');
+        const weightsCookie = cookies.find(cookie => cookie.startsWith('exerciseWeights='));
+        if (weightsCookie) {
+            const savedWeights = JSON.parse(decodeURIComponent(weightsCookie.split('=')[1]));
+            savedWeights.forEach(saved => {
+                const exercise = exercises.find(ex => ex.name === saved.name);
+                if (exercise) {
+                    exercise.weight = saved.weight;
+                    const exerciseElement = [...document.querySelectorAll('.exercise')].find(elem => elem.querySelector('.exercise-selector').value === saved.name);
+                    if (exerciseElement) {
+                        exerciseElement.querySelector('.weight-display').textContent = `${saved.weight} ק"ג`;
+                    }
+                }
+            });
+        }
     }
 
     document.querySelectorAll('.exercise').forEach((exerciseElement, exerciseIndex) => {
