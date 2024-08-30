@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">PowerLift 5x5</h1>
+
+        <!-- Exercise 1 -->
+        <div class="exercise">
+            <div class="exercise-info">
+                <select class="exercise-selector">
+                    <option value="Squat">סקוואט</option>
+                    <option value="Bench Press">לחיצת חזה</option>
+                    <option value="Deadlift">דדליפט</option>
+                    <option value="Overhead Press">לחיצת כתפיים</option>
+                    <option value="Barbell Row">חתירה עם מוט</option>
+                    <option value="Pull Up">מתח</option>
+                    <option value="Dumbbell Curl">כפיפת מרפקים עם משקולת</option>
+                </select>
+            </div>
+            <div class="weight-control">
+                <button class="weight-button decrement">-</button>
+                <span class="weight-display">42.5 ק"ג</span>
+                <button class="weight-button increment">+</button>
+            </div>
+            <div class="set-buttons">
+                <button class="set-control-button decrement-set">-</button>
+                <div class="set-list">
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                </div>
+                <button class="set-control-button increment-set">+</button>
+            </div>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="exercise">
+            <div class="exercise-info">
+                <select class="exercise-selector">
+                    <option value="Squat">סקוואט</option>
+                    <option value="Bench Press" selected>לחיצת חזה</option>
+                    <option value="Deadlift">דדליפט</option>
+                    <option value="Overhead Press">לחיצת כתפיים</option>
+                    <option value="Barbell Row">חתירה עם מוט</option>
+                    <option value="Pull Up">מתח</option>
+                    <option value="Dumbbell Curl">כפיפת מרפקים עם משקולת</option>
+                </select>
+            </div>
+            <div class="weight-control">
+                <button class="weight-button decrement">-</button>
+                <span class="weight-display">40 ק"ג</span>
+                <button class="weight-button increment">+</button>
+            </div>
+            <div class="set-buttons">
+                <button class="set-control-button decrement-set">-</button>
+                <div class="set-list">
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                </div>
+                <button class="set-control-button increment-set">+</button>
+            </div>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="exercise">
+            <div class="exercise-info">
+                <select class="exercise-selector">
+                    <option value="Squat">סקוואט</option>
+                    <option value="Bench Press">לחיצת חזה</option>
+                    <option value="Deadlift" selected>דדליפט</option>
+                    <option value="Overhead Press">לחיצת כתפיים</option>
+                    <option value="Barbell Row">חתירה עם מוט</option>
+                    <option value="Pull Up">מתח</option>
+                    <option value="Dumbbell Curl">כפיפת מרפקים עם משקולת</option>
+                </select>
+            </div>
+            <div class="weight-control">
+                <button class="weight-button decrement">-</button>
+                <span class="weight-display">95 ק"ג</span>
+                <button class="weight-button increment">+</button>
+            </div>
+            <div class="set-buttons">
+                <button class="set-control-button decrement-set">-</button>
+                <div class="set-list">
+                    <button class="set-button">5</button>
+                    <button class="set-button">5</button>
+                </div>
+                <button class="set-control-button increment-set">+</button>
+            </div>
+        </div>
+
+        <div id="timer-container" class="timer-container">
+            <svg class="progress-ring" width="120" height="120">
+                <circle class="progress-ring__circle" stroke="#4CAF50" stroke-width="4" fill="transparent" r="54" cx="60" cy="60"/>
+            </svg>
+            <div id="timer-display" class="timer-display">0:00</div>
+        </div>
+
+        <button id="end-workout-button" class="end-workout-button">סיום אימון</button>
+
+        <div class="workout-history">
+            <h2>היסטוריית אימונים</h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
