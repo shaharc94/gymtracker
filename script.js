@@ -86,7 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateWeight(exerciseIndex, increment) {
         const exercise = exercises[exerciseIndex];
         const weightDisplay = document.querySelectorAll('.exercise')[exerciseIndex].querySelector('.weight-display');
-        let newWeight = exercise.weight + increment;
+
+        // Check if the exercise is 'Dumbbell Curl' and set the increment accordingly
+        const weightIncrement = exercise.name === 'כפיפת מרפקים עם משקולת' ? 1 : 2.5;
+        let newWeight = exercise.weight + (increment * weightIncrement);
 
         newWeight = Math.max(newWeight, 0);
 
@@ -211,26 +214,34 @@ document.addEventListener('DOMContentLoaded', () => {
             workoutEntry.classList.add('workout-entry');
             workoutEntry.innerHTML = `
                 <h3>אימון - ${workout.date} - משך: ${workout.duration}</h3>
-                <button class="delete-button" data-index="${index}">מחק</button>
             `;
 
             workout.exercises.forEach(exercise => {
-                const totalWeight = exercise.sets.reduce((acc, reps) => acc + (reps * exercise.weight), 0);
-                const exerciseInfo = document.createElement('p');
-                exerciseInfo.textContent = `${exercise.name}: ${exercise.weight} ק"ג - סטים: ${exercise.sets.join(', ')} - סה"כ משקל: ${totalWeight} ק"ג`;
-                workoutEntry.appendChild(exerciseInfo);
+                const exerciseDetails = document.createElement('div');
+                exerciseDetails.classList.add('exercise-details');
+                exerciseDetails.innerHTML = `
+                    <p>${exercise.name}: ${exercise.weight} ק"ג</p>
+                    <div class="set-list-history">
+                        ${exercise.sets.map(reps => `
+                            <button class="set-button-history ${reps > 0 ? 'completed' : ''}">${reps}</button>
+                        `).join('')}
+                    </div>
+                `;
+
+                workoutEntry.appendChild(exerciseDetails);
             });
 
-            historyContainer.appendChild(workoutEntry);
-        });
-
-        document.querySelectorAll('.delete-button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const index = event.target.dataset.index;
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
+            deleteButton.textContent = 'מחק';
+            deleteButton.addEventListener('click', () => {
                 workoutHistory.splice(index, 1);
                 saveWorkoutHistory(workoutHistory);
                 displayWorkoutHistory();
             });
+
+            workoutEntry.appendChild(deleteButton);
+            historyContainer.appendChild(workoutEntry);
         });
     }
 
@@ -282,11 +293,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         exerciseElement.querySelector('.weight-control .increment').addEventListener('click', () => {
-            updateWeight(exerciseIndex, 2.5);
+            updateWeight(exerciseIndex, 1);
         });
 
         exerciseElement.querySelector('.weight-control .decrement').addEventListener('click', () => {
-            updateWeight(exerciseIndex, -2.5);
+            updateWeight(exerciseIndex, -1);
         });
 
         exerciseElement.querySelector('.set-control-button.increment-set').addEventListener('click', () => {
